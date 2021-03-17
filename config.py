@@ -2,7 +2,7 @@ import json
 import copy
 import os
 import sys
-import collections
+import collections, collections.abc
 
 # (c) https://gist.github.com/angstwad/bf22d1822c38a92ec0a9
 def _dict_merge(dct, merge_dct):
@@ -16,7 +16,7 @@ def _dict_merge(dct, merge_dct):
     """
     for k, v in merge_dct.items():
         if (k in dct and isinstance(dct[k], dict)
-                and isinstance(merge_dct[k], collections.Mapping)):
+                and isinstance(merge_dct[k], collections.abc.Mapping)):
             _dict_merge(dct[k], merge_dct[k])
         else:
             dct[k] = merge_dct[k]

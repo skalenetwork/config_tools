@@ -108,7 +108,7 @@ do
                 "nodeInfo": {
                             "nodeName": "Node$I",
                             "nodeID": $I,
-                            "bindIP": "$IP",
+                            "bindIP": "0.0.0.0",
                             "basePort": $PORT,
                             "ecdsaKeyName": $(jq '.result.keyName' sgx/ecdsa$I.json),
                                "wallets": {
@@ -139,7 +139,7 @@ do
                 "nodeInfo": {
                             "nodeName": "Node$I",
                             "nodeID": $I,
-                            "bindIP": "$IP",
+                            "bindIP": "0.0.0.0",
                             "basePort": $PORT,
                             "ecdsaKeyName": ""
                 }
