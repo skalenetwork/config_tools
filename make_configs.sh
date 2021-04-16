@@ -12,13 +12,17 @@
 
 # uniq.txt caches schain id for SGX server
 
+N=$1
+IFS=',' read -r -a IPS <<< "$2"
+config_mixin=""
+if [ $3 != "" ]
+then
+  config_mixin="$(cd $3; pwd)"
+fi
+
 ORIG_CWD="$( pwd )"
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd "$SCRIPT_DIR"
-
-N=$1
-IFS=',' read -r -a IPS <<< "$2"
-config_mixin=$3
 
 for I in $( seq 0 $((N-1)) ); do
     IPS[$I]=${IPS[$I]:-127.0.0.$((I+1)):$((1231+I*10))}
