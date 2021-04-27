@@ -217,7 +217,7 @@
         "0xf2197b153b4c9086fc5410431fbf7960d284c65e": { "balance": "1000000000000000000000000000000" } ,
         "0xfe14077c26a507496b7208384d459e21c49c4212": { "balance": "1000000000000000000000000000000" } ,
         "0xfe3d4f1fc038f4f756ba44995129cd45c9e0e861": { "balance": "1000000000000000000000000000000" } ,
-        "0x099452fedc71897880f584b1bc1706efc4e76e36": { "balance": "1000000000000000000000000000000" } ,
+        "0x11D4112d5d923fCaBFffb78F1A41694acD1500be": { "balance": "1000000000000000000000000000000" } ,
     "0000000000000000000000000000000000000001": { "precompiled": { "name": "ecrecover", "linear": { "base": 3000, "word": 0 } } },
     "0000000000000000000000000000000000000002": { "precompiled": { "name": "sha256", "linear": { "base": 60, "word": 12 } } },
     "0000000000000000000000000000000000000003": { "precompiled": { "name": "ripemd160", "linear": { "base": 600, "word": 120 } } },
@@ -274,7 +274,7 @@
 	        "schainID": 1,
 	        "schainOwner": "0x66c5a87f4a49DD75e970055A265E8dd5C3F8f852",
 	        "storageLimit": 1000000,
-	        "emptyBlockIntervalMs": 3000,
+	        "emptyBlockIntervalMs": 1000,
 	        "nodes": [
 	          { "nodeID": 1112, "ip": "127.0.0.1", "basePort": 1231, "schainIndex" : 1, "publicKey":""}
 	        ]
