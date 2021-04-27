@@ -17,7 +17,7 @@ IFS=',' read -r -a IPS <<< "$2"
 config_mixin=""
 if [ $3 != "" ]
 then
-  config_mixin="$(cd $3; pwd)"
+  config_mixin=$(realpath $3)
 fi
 
 ORIG_CWD="$( pwd )"
