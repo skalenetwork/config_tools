@@ -273,7 +273,7 @@
 	        "schainName": "TestChain",
 	        "schainID": 1,
 	        "schainOwner": "0x66c5a87f4a49DD75e970055A265E8dd5C3F8f852",
-	        "storageLimit": 1000000,
+	        "contractStorageLimit": 1000000,
 	        "emptyBlockIntervalMs": 1000,
 	        "nodes": [
 	          { "nodeID": 1112, "ip": "127.0.0.1", "basePort": 1231, "schainIndex" : 1, "publicKey":""}
