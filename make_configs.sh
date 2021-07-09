@@ -15,9 +15,9 @@
 N=$1
 IFS=',' read -r -a IPS <<< "$2"
 config_mixin=""
-if [ $3 != "" ]
+if [ "$3" != "" ]
 then
-  config_mixin=$(realpath $3)
+  config_mixin=$(realpath "$3")
 fi
 
 ORIG_CWD="$( pwd )"
@@ -43,7 +43,12 @@ set +x
 
 echo -- Prepare config --
 
-echo '{ "skaleConfig": {"sChain": { "nodes": [' > _nodes.json
+echo '{ "skaleConfig": {"sChain": { ' > _nodes.json 
+if [ ! -z "$SGX_URL" ]
+then
+    echo '"snapshotIntervalSec": 60,'  >> _nodes.json
+fi
+echo '"nodes": [' >> _nodes.json
 
 I=0
 for E in ${IPS[*]}
@@ -52,7 +57,7 @@ do
     IFS=':' read -r -a arr <<< "$E"
     IP=${arr[0]}
     PORT=${arr[1]:-1231}
-	
+
 	I=$((I+1))
 
 	if [ ! -z "$SGX_URL" ]
@@ -81,7 +86,7 @@ do
         }
 ****
     fi
-	
+
 	echo "$NODE_CFG" >> _nodes.json
 
 	if [[ "$I" != "$N" ]]; then
@@ -101,7 +106,7 @@ do
     IFS=':' read -r -a arr <<< "$E"
     IP=${arr[0]}
     PORT=${arr[1]:-1231}
-    
+
 	I=$((I+1))
 
 	if [ ! -z "$SGX_URL" ]
@@ -131,7 +136,7 @@ do
                                      "commonBLSPublicKey3": $(jq '.commonBLSPublicKey["3"]' sgx/keys$N.json)
                                     }
                                    }
-    
+
                 }
             }
         }
