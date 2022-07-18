@@ -4,6 +4,7 @@
 # $1 N - number of nodes
 # $2 ip:port,... - comma-separated list of ips and base ports (optional)
 # $3 config_mixin - config to merge with common one (optional)
+# --bind0 - if need to bind to 0.0.0.0, and not a specisifed IP address
 # SGX_URL
 # CERTS_PATH - path to SGX certificates, default /skale_node_data/sgx_certs
 
@@ -18,6 +19,12 @@ config_mixin=""
 if [ "$3" != "" ]
 then
   config_mixin=$(realpath "$3")
+fi
+
+BIND0=false
+if [[ "$@" == *"--bind0"* ]]
+then
+  BIND0=true
 fi
 
 ORIG_CWD="$( pwd )"
@@ -109,6 +116,12 @@ do
 
 	I=$((I+1))
 
+        BINDIP=$IP
+        if $BIND0
+        then
+          BINDIP='0.0.0.0'
+        fi
+
 	if [ ! -z "$SGX_URL" ]
 	then
         read -r -d '' NODE_INFO <<- ****
@@ -117,7 +130,7 @@ do
                 "nodeInfo": {
                             "nodeName": "Node$I",
                             "nodeID": $I,
-                            "bindIP": "0.0.0.0",
+                            "bindIP": "$BINDIP",
                             "basePort": $PORT,
                             "ecdsaKeyName": $(jq '.result.keyName' sgx/ecdsa$I.json),
                                "wallets": {
@@ -148,7 +161,7 @@ do
                 "nodeInfo": {
                             "nodeName": "Node$I",
                             "nodeID": $I,
-                            "bindIP": "0.0.0.0",
+                            "bindIP": "$BINDIP",
                             "basePort": $PORT,
                             "ecdsaKeyName": ""
                 }
