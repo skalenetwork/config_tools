@@ -265,7 +265,7 @@
 	      "maxCacheSize": 2000000,
 	      "collectionQueueSize": 2,
 	      "collectionDuration": 10,
-	      "transactionQueueSize": 100,
+	      "transactionQueueSize": 1000,
 	      "maxOpenLeveldbFiles": 25,
               "skale-manager": {
                 "Nodes": "0xC6821c7f66D7E5E387F94d15887639eAF3783263",
