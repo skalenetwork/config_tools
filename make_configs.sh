@@ -132,6 +132,7 @@ do
                             "nodeID": $I,
                             "bindIP": "$BINDIP",
                             "basePort": $PORT,
+                            "enable-debug-behavior-apis": true,
                             "ecdsaKeyName": $(jq '.result.keyName' sgx/ecdsa$I.json),
                                "wallets": {
                                     "ima": {
@@ -163,7 +164,8 @@ do
                             "nodeID": $I,
                             "bindIP": "$BINDIP",
                             "basePort": $PORT,
-                            "ecdsaKeyName": ""
+                            "ecdsaKeyName": "",
+                            "enable-debug-behavior-apis": true
                 }
             }
         }

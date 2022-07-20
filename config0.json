@@ -260,6 +260,7 @@
 	      "logLevel": "trace",
 	      "logLevelProposal": "trace",
 	      "rotateAfterBlock": 0,
+              "enable-debug-behavior-apis": true,
 	      "ecdsaKeyName": "",
 	      "minCacheSize": 1000000,
 	      "maxCacheSize": 2000000,
