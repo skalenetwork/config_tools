@@ -51,7 +51,7 @@ set +x
 echo -- Prepare config --
 
 echo '{ "skaleConfig": {"sChain": { ' > _nodes.json 
-if [ ! -z "$SGX_URL" ]
+if [ ! -z "$SGX_URL" && -z "$( python3 config.py extract $config_mixin skaleConfig.sChain.snapshotIntervalSec )" ]
 then
     echo '"snapshotIntervalSec": 60,'  >> _nodes.json
 fi
