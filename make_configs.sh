@@ -16,6 +16,7 @@
 N=$1
 IFS=',' read -r -a IPS <<< "$2"
 config_mixin=""
+
 if [ "$3" != "" ]
 then
   config_mixin=$(realpath "$3")
@@ -35,18 +36,22 @@ for I in $( seq 0 $((N-1)) ); do
     IPS[$I]=${IPS[$I]:-127.0.0.$((I+1)):$((1231+I*10))}
 done
 
+echo "IPS="${IPS[*]}
+echo "SGX_URL=$SGX_URL"
+
 if [ ! -z "$SGX_URL" ]
 then
     CERTS_PATH=${CERTS_PATH:-/skale_node_data/sgx_certs}
     if [ ! -f ${ORIG_CWD}/uniq.txt ]
     then
         uniq=$(date +%s)
+	echo "Preparing SGX keys"
         ./sgx/prepare_keys.sh $N $uniq $SGX_URL "$CERTS_PATH"
         echo $uniq >${ORIG_CWD}/uniq.txt
+    else
+	echo "Found existing SGX keys via ${ORIG_CWD}/uniq.txt"
     fi
 fi
-
-set +x
 
 echo -- Prepare config --
 
@@ -69,6 +74,13 @@ do
 
 	if [ ! -z "$SGX_URL" ]
 	then
+	    if [ -f "sgx/keys$N.json" ]
+	    then
+		echo "Reading SGX keys from sgx/keys$N.json"
+	    else
+		echo "Error reading sgx/keys$N.json"
+		exit 1
+	    fi
         read -r -d '' NODE_CFG <<- ****
         {
             "nodeID": $I,
@@ -83,6 +95,7 @@ do
         }
 ****
     else
+	echo "Generating no-SGX config"
         read -r -d '' NODE_CFG <<- ****
         {
             "nodeID": $I,
@@ -104,8 +117,9 @@ done
 
 echo "]" >> _nodes.json
 
-if [ ! -x "$SGX_URL" ]
+if [ ! -z "$SGX_URL" ]
 then
+echo "Preparing nodeGroups"
 echo ',"nodeGroups": { "0": { "nodes": {' >> _nodes.json
 I=0
 for E in ${IPS[*]}
