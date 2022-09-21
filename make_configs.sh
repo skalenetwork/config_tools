@@ -51,10 +51,10 @@ set +x
 echo -- Prepare config --
 
 echo '{ "skaleConfig": {"sChain": { ' > _nodes.json 
-if [[ ! -z "$SGX_URL" && -z "$( python3 config.py extract $config_mixin skaleConfig.sChain.snapshotIntervalSec )" ]]
-then
-    echo '"snapshotIntervalSec": 60,'  >> _nodes.json
-fi
+#if [[ ! -z "$SGX_URL" && -z "$( python3 config.py extract $config_mixin skaleConfig.sChain.snapshotIntervalSec )" ]]
+#then
+#    echo '"snapshotIntervalSec": 60,'  >> _nodes.json
+#fi
 echo '"nodes": [' >> _nodes.json
 
 I=0
@@ -102,7 +102,52 @@ do
 
 done
 
-echo "] } } }" >> _nodes.json
+echo "]" >> _nodes.json
+
+if [ ! -x "$SGX_URL" ]
+then
+echo ',"nodeGroups": { "0": { "nodes": {' >> _nodes.json
+I=0
+for E in ${IPS[*]}
+do
+
+    IFS=':' read -r -a arr <<< "$E"
+    IP=${arr[0]}
+    PORT=${arr[1]:-1231}
+
+	I=$((I+1))
+
+        read -r -d '' ITEM <<- ****
+	"$I":
+        [   $((I-1)),
+            $I,
+            "0x$(echo $(jq '.result.publicKey' sgx/ecdsa$I.json) | xargs echo)"
+        ]
+****
+
+echo "$ITEM" >> _nodes.json
+if [[ "$I" != "$N" ]]; then
+	echo "," >>_nodes.json
+fi
+
+done
+echo "}," >> _nodes.json
+
+read -r -d '' BLS <<- ****
+"bls_public_key": {
+    "blsPublicKey0": $(jq '.commonBLSPublicKey["0"]' sgx/keys$N.json),
+    "blsPublicKey1": $(jq '.commonBLSPublicKey["1"]' sgx/keys$N.json),
+    "blsPublicKey2": $(jq '.commonBLSPublicKey["2"]' sgx/keys$N.json),
+    "blsPublicKey3": $(jq '.commonBLSPublicKey["3"]' sgx/keys$N.json)
+}
+****
+
+echo "$BLS" >> _nodes.json
+
+echo "} }" >> _nodes.json
+fi # if SGX_URL
+
+echo "} } }" >> _nodes.json
 
 python3 config.py merge config0.json $config_mixin _nodes.json >config.json
 rm _nodes.json
