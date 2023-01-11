@@ -1,15 +1,23 @@
 {
-    "unddos": {
-        "origins": [
-            {
-                "origin": [ "*" ],
-                "ban_lengthy": 0,
-                "ban_peak": 0,
-                "max_calls_per_minute": 1000000000,
-                "max_calls_per_second": 1000000000,
-                "max_ws_conn": 65535
-            }
-        ]
+     "unddos": {
+        "enabled": true,
+        "origins": [{
+            "origin": [
+                "*"
+            ],
+            "ban_lengthy": 120,
+            "ban_peak": 15,
+            "max_calls_per_minute": 5000000,
+            "max_calls_per_second": 1500000,
+            "max_ws_conn": 20000
+        }],
+        "global": {
+            "ban_lengthy": 120,
+            "ban_peak": 15,
+            "max_calls_per_minute": 5000000,
+            "max_calls_per_second": 1500000,
+            "max_ws_conn": 40
+        }
     },
   "sealEngine": "Ethash",
   "params": {
@@ -265,7 +273,7 @@
 	      "maxCacheSize": 2000000,
 	      "collectionQueueSize": 2,
 	      "collectionDuration": 10,
-	      "transactionQueueSize": 100,
+	      "transactionQueueSize": 24000,
 	      "maxOpenLeveldbFiles": 25
 	    },
 	    "sChain":
