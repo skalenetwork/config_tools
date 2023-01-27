@@ -34,13 +34,12 @@
     "maximumExtraDataSize": "0x20",
     "tieBreakingGas": false,
     "minGasLimit": "0xFFFFFFF",
-        "maxGasLimit": "7fffffffffffffff",
+    "maxGasLimit": "0xFFFFFFF",
     "gasLimitBoundDivisor": "0x0400",
     "minimumDifficulty": "0x0",
     "difficultyBoundDivisor": "0x0800",
     "durationLimit": "0x0d",
-    "blockReward": "0x4563918244F40000",
-    "externalGasDifficulty": "0x01"
+    "blockReward": "0x4563918244F40000"
   },
   "genesis": {
     "nonce": "0x0000000000000042",
@@ -262,55 +261,30 @@
         },
 	 "skaleConfig": {
 	    "nodeInfo": {
-            "nodeID": 1112,
 	      "nodeName": "Node1",
-            "basePort": 1231,
-            "httpRpcPort": 1234,
-            "httpsRpcPort": 1239,
-            "wsRpcPort": 1233,
-            "wssRpcPort": 1238,
-            "infoHttpRpcPort": 1240,
+	      "nodeID": 1112,
 	      "bindIP": "0.0.0.0",
 	      "basePort": 1231,
 	      "logLevel": "trace",
-            "logLevelConfig": "trace",
+	      "logLevelProposal": "trace",
+	      "rotateAfterBlock": 0,
 	      "ecdsaKeyName": "",
-          "minCacheSize": 8000000,
-          "maxCacheSize": 16000000,
-          "collectionQueueSize": 20,
-          "collectionDuration": 60,
-          "transactionQueueSize": 100000,
-          "maxOpenLeveldbFiles": 256,
-          "info-acceptors": 1
+	      "minCacheSize": 1000000,
+	      "maxCacheSize": 2000000,
+	      "collectionQueueSize": 2,
+	      "collectionDuration": 10,
+	      "transactionQueueSize": 24000,
+	      "maxOpenLeveldbFiles": 25
 	    },
-        "sChain": {
-            "schainID": 1,
+	    "sChain":
+	      {
 	        "schainName": "TestChain",
-            "blockAuthor": "0xd2bA3e0000000000000000000000000000000000",
-            "contractStorageLimit": 3995998617,
-            "dbStorageLimit": 1331999539,
-            "snapshotIntervalSec": -1,
-            "emptyBlockIntervalMs": 10000,
-            "freeContractDeployment": true,
-            "maxConsensusStorageBytes": 6659997696,
-            "maxSkaledLeveldbStorageBytes": 6659997696,
-            "maxFileStorageBytes": 6659997696,
-            "maxReservedStorageBytes": 2219999232,
-            "multiTransactionMode": false,
+	        "schainID": 1,
+	        "schainOwner": "0x66c5a87f4a49DD75e970055A265E8dd5C3F8f852",
+	        "contractStorageLimit": 1000000,
+	        "emptyBlockIntervalMs": 3000,
 	        "nodes": [
-                {
-                    "nodeID": 1112,
-                    "nodeName": "Node1",
-                    "basePort": 1231,
-                    "httpRpcPort": 1234,
-                    "httpsRpcPort": 1239,
-                    "wsRpcPort": 1233,
-                    "wssRpcPort": 1238,
-                    "publicKey": "",
-                    "schainIndex": 1,
-                    "ip": "127.0.0.1",
-                    "publicIP": "127.0.0.1"
-                }
+	          { "nodeID": 1112, "ip": "127.0.0.1", "basePort": 1231, "schainIndex" : 1, "publicKey":""}
 	        ]
 	      }
   }
