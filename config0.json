@@ -749,8 +749,6 @@
             "basePort": 1231,
             "httpRpcPort": 1234,
             "httpsRpcPort": 1239,
-            "wsRpcPort": 1233,
-            "wssRpcPort": 1238,
             "infoHttpRpcPort": 1240,
             "bindIP": "0.0.0.0",
             "logLevel": "trace",
