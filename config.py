@@ -2,7 +2,7 @@ import json
 import copy
 import os
 import sys
-import collections, collections.abc
+import typing, collections.abc
 
 # (c) https://gist.github.com/angstwad/bf22d1822c38a92ec0a9
 def _dict_merge(dct, merge_dct):
