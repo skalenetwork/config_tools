@@ -5,11 +5,13 @@
 # $2 ip:port,... - comma-separated list of ips and base ports (optional)
 # $3 config_mixin - config to merge with common one (optional)
 # --bind0 - if need to bind to 0.0.0.0, and not a specisifed IP address
+# --historic ip:port - where will historic node listen
 # SGX_URL
 # CERTS_PATH - path to SGX certificates, default /skale_node_data/sgx_certs
 
 # output:
 # config1.json ... configN.json
+# config-historic.json
 
 # uniq.txt caches schain id for SGX server
 
@@ -27,6 +29,9 @@ if [[ "$@" == *"--bind0"* ]]
 then
   BIND0=true
 fi
+
+HISTORIC=( $( echo "$@" | grep -oP "\--historic (\S+)" ) )
+HISTORIC=${HISTORIC[1]}
 
 ORIG_CWD="$( pwd )"
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
@@ -235,6 +240,31 @@ do
 
 	python3 config.py merge config.json _node_info.json >${ORIG_CWD}/config$I.json
 done
+
+if [[ ! -z "$HISTORIC" ]]
+then
+
+    IFS=':' read -r -a arr <<< "$HISTORIC"
+    IP=${arr[0]}
+    PORT=${arr[1]:-1231}
+
+    read -r -d '' NODE_INFO <<- ****
+    {
+        "skaleConfig": {
+            "nodeInfo": {
+                        "nodeName": "Historic",
+                        "nodeID": 100,
+                        "bindIP": "$IP",
+                        "basePort": $PORT,
+                        "ecdsaKeyName": "",
+                        "enable-debug-behavior-apis": true
+            }
+        }
+    }
+****
+	echo "$NODE_INFO" > _node_info.json
+	python3 config.py merge config.json _node_info.json >${ORIG_CWD}/config-historic.json
+fi
 
 set -x
 
