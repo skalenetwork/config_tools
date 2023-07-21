@@ -257,7 +257,9 @@ then
                         "bindIP": "$IP",
                         "basePort": $PORT,
                         "ecdsaKeyName": "",
-                        "enable-debug-behavior-apis": true
+                        "enable-debug-behavior-apis": true,
+                        "syncNode": true,
+                        "archiveMode": true
             }
         }
     }
