@@ -248,6 +248,11 @@ then
     IP=${arr[0]}
     PORT=${arr[1]:-1231}
 
+    if $BIND0
+    then
+        IP='0.0.0.0'
+    fi
+
     read -r -d '' NODE_INFO <<- ****
     {
         "skaleConfig": {
