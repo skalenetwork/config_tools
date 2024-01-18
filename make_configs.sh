@@ -6,12 +6,14 @@
 # $3 config_mixin - config to merge with common one (optional)
 # --bind0 - if need to bind to 0.0.0.0, and not a specisifed IP address
 # --historic ip:port - where will historic node listen
+# --sync ip:port - where sync node wil listen
 # SGX_URL
 # CERTS_PATH - path to SGX certificates, default /skale_node_data/sgx_certs
 
 # output:
 # config1.json ... configN.json
 # config-historic.json
+# config-sync.json
 
 # uniq.txt caches schain id for SGX server
 
@@ -32,6 +34,9 @@ fi
 
 HISTORIC=( $( echo "$@" | grep -oP "\--historic (\S+)" ) )
 HISTORIC=${HISTORIC[1]}
+
+SYNC=( $( echo "$@" | grep -oP "\--sync (\S+)" ) )
+SYNC=${SYNC[1]}
 
 ORIG_CWD="$( pwd )"
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
@@ -271,6 +276,38 @@ then
 ****
 	echo "$NODE_INFO" > _node_info.json
 	python3 config.py merge config.json _node_info.json >${ORIG_CWD}/config-historic.json
+fi
+
+if [[ ! -z "$SYNC" ]]
+then
+
+    IFS=':' read -r -a arr <<< "$SYNC"
+    IP=${arr[0]}
+    PORT=${arr[1]:-1231}
+
+    if $BIND0
+    then
+        IP='0.0.0.0'
+    fi
+
+    read -r -d '' NODE_INFO <<- ****
+    {
+        "skaleConfig": {
+            "nodeInfo": {
+                        "nodeName": "Sync",
+                        "nodeID": 101,
+                        "bindIP": "$IP",
+                        "basePort": $PORT,
+                        "ecdsaKeyName": "",
+                        "enable-debug-behavior-apis": true,
+                        "syncNode": true,
+                        "archiveMode": false
+            }
+        }
+    }
+****
+	echo "$NODE_INFO" > _node_info.json
+	python3 config.py merge config.json _node_info.json >${ORIG_CWD}/config-sync.json
 fi
 
 set -x
