@@ -218,8 +218,7 @@ do
                                      "commonBLSPublicKey2": $(jq '.commonBLSPublicKey["2"]' sgx/keys$N.json),
                                      "commonBLSPublicKey3": $(jq '.commonBLSPublicKey["3"]' sgx/keys$N.json)
                                     }
-                                   }
-
+                                }
                 }
             }
         }
@@ -258,22 +257,57 @@ then
         IP='0.0.0.0'
     fi
 
-    read -r -d '' NODE_INFO <<- ****
-    {
-        "skaleConfig": {
-            "nodeInfo": {
-                        "nodeName": "Historic",
-                        "nodeID": 100,
-                        "bindIP": "$IP",
-                        "basePort": $PORT,
-                        "ecdsaKeyName": "",
-                        "enable-debug-behavior-apis": true,
-                        "syncNode": true,
-                        "archiveMode": true
+    if [ ! -z "$SGX_URL" ]
+	then
+
+        read -r -d '' NODE_INFO <<- ****
+        {
+            "skaleConfig": {
+                "nodeInfo": {
+                            "nodeName": "Historic",
+                            "nodeID": 100,
+                            "bindIP": "$IP",
+                            "basePort": $PORT,
+                            "ecdsaKeyName": "",
+                            "enable-debug-behavior-apis": true,
+                            "syncNode": true,
+                            "archiveMode": true,
+                            "syncFromCatchup": true,
+                            "ecdsaKeyName": $(jq '.result.keyName' sgx/ecdsa$I.json),
+                               "wallets": {
+                                    "ima": {
+                                     "n": 4,
+                                     "commonBLSPublicKey0": $(jq '.commonBLSPublicKey["0"]' sgx/keys$N.json),
+                                     "commonBLSPublicKey1": $(jq '.commonBLSPublicKey["1"]' sgx/keys$N.json),
+                                     "commonBLSPublicKey2": $(jq '.commonBLSPublicKey["2"]' sgx/keys$N.json),
+                                     "commonBLSPublicKey3": $(jq '.commonBLSPublicKey["3"]' sgx/keys$N.json)
+                                    }
+                                }
+                }
             }
         }
-    }
 ****
+    else
+
+        read -r -d '' NODE_INFO <<- ****
+        {
+            "skaleConfig": {
+                "nodeInfo": {
+                            "nodeName": "Historic",
+                            "nodeID": 100,
+                            "bindIP": "$IP",
+                            "basePort": $PORT,
+                            "ecdsaKeyName": "",
+                            "enable-debug-behavior-apis": true,
+                            "syncNode": true,
+                            "archiveMode": true,
+                            "testSignatures": true
+                }
+            }
+        }
+****
+    fi
+
 	echo "$NODE_INFO" > _node_info.json
 	python3 config.py merge config.json _node_info.json >${ORIG_CWD}/config-historic.json
 fi
@@ -290,22 +324,56 @@ then
         IP='0.0.0.0'
     fi
 
-    read -r -d '' NODE_INFO <<- ****
-    {
-        "skaleConfig": {
-            "nodeInfo": {
-                        "nodeName": "Sync",
-                        "nodeID": 101,
-                        "bindIP": "$IP",
-                        "basePort": $PORT,
-                        "ecdsaKeyName": "",
-                        "enable-debug-behavior-apis": true,
-                        "syncNode": true,
-                        "archiveMode": false
+    if [ ! -z "$SGX_URL" ]
+	then
+
+        read -r -d '' NODE_INFO <<- ****
+        {
+            "skaleConfig": {
+                "nodeInfo": {
+                            "nodeName": "Sync",
+                            "nodeID": 100,
+                            "bindIP": "$IP",
+                            "basePort": $PORT,
+                            "ecdsaKeyName": "",
+                            "enable-debug-behavior-apis": true,
+                            "syncNode": true,
+                            "archiveMode": false,
+                            "ecdsaKeyName": $(jq '.result.keyName' sgx/ecdsa$I.json),
+                               "wallets": {
+                                    "ima": {
+                                     "n": 4,
+                                     "commonBLSPublicKey0": $(jq '.commonBLSPublicKey["0"]' sgx/keys$N.json),
+                                     "commonBLSPublicKey1": $(jq '.commonBLSPublicKey["1"]' sgx/keys$N.json),
+                                     "commonBLSPublicKey2": $(jq '.commonBLSPublicKey["2"]' sgx/keys$N.json),
+                                     "commonBLSPublicKey3": $(jq '.commonBLSPublicKey["3"]' sgx/keys$N.json)
+                                    }
+                                }
+                }
             }
         }
-    }
 ****
+    else
+
+        read -r -d '' NODE_INFO <<- ****
+        {
+            "skaleConfig": {
+                "nodeInfo": {
+                            "nodeName": "Sync",
+                            "nodeID": 101,
+                            "bindIP": "$IP",
+                            "basePort": $PORT,
+                            "ecdsaKeyName": "",
+                            "enable-debug-behavior-apis": true,
+                            "syncNode": true,
+                            "archiveMode": false,
+                            "testSignatures": true
+                }
+            }
+        }
+****
+    fi
+
 	echo "$NODE_INFO" > _node_info.json
 	python3 config.py merge config.json _node_info.json >${ORIG_CWD}/config-sync.json
 fi
