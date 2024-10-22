@@ -169,7 +169,7 @@ fi # if SGX_URL
 echo "} } }" >> _nodes.json
 
 python3 config.py merge config0.json $config_mixin _nodes.json >config.json
-rm _nodes.json
+# rm _nodes.json
 
 I=0
 for E in ${IPS[*]}
@@ -253,22 +253,53 @@ then
         IP='0.0.0.0'
     fi
 
-    read -r -d '' NODE_INFO <<- ****
-    {
+    echo "SGX $SGX_URL"
+
+    if [[ -z "$SGX_URL" ]]
+    then
+      read -r -d '' NODE_INFO <<- ****
+      {
         "skaleConfig": {
-            "nodeInfo": {
-                        "nodeName": "Historic",
-                        "nodeID": 100,
-                        "bindIP": "$IP",
-                        "basePort": $PORT,
-                        "ecdsaKeyName": "",
-                        "enable-debug-behavior-apis": true,
-                        "syncNode": true,
-                        "archiveMode": true
-            }
+          "nodeInfo": {
+                          "nodeName": "Historic",
+                          "nodeID": 100,
+                          "bindIP": "$IP",
+                          "basePort": $PORT,
+                          "ecdsaKeyName": "",
+                          "enable-debug-behavior-apis": true,
+                          "syncNode": true,
+                          "archiveMode": true
+          }
         }
-    }
+      }
 ****
+    else
+      read -r -d '' NODE_INFO <<- ****
+      {
+        "skaleConfig": {
+          "nodeInfo": {
+                          "nodeName": "Historic",
+                          "nodeID": 100,
+                          "bindIP": "$IP",
+                          "basePort": $PORT,
+                          "ecdsaKeyName": "",
+                          "wallets": {
+                            "ima": {
+                              "commonBLSPublicKey0": $(jq '.commonBLSPublicKey["0"]' sgx/keys$N.json),
+                              "commonBLSPublicKey1": $(jq '.commonBLSPublicKey["1"]' sgx/keys$N.json),
+                              "commonBLSPublicKey2": $(jq '.commonBLSPublicKey["2"]' sgx/keys$N.json),
+                              "commonBLSPublicKey3": $(jq '.commonBLSPublicKey["3"]' sgx/keys$N.json)
+                            }
+                          },
+                          "enable-debug-behavior-apis": true,
+                          "syncNode": true,
+                          "archiveMode": true
+          }
+        }
+      }
+****
+    fi
+
 	echo "$NODE_INFO" > _node_info.json
 	python3 config.py merge config.json _node_info.json >${ORIG_CWD}/config-historic.json
 fi

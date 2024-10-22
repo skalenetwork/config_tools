@@ -282,7 +282,8 @@
 	        "schainID": 1,
 	        "schainOwner": "0x66c5a87f4a49DD75e970055A265E8dd5C3F8f852",
 	        "contractStorageLimit": 1000000,
-	        "emptyBlockIntervalMs": 3000,
+	        "emptyBlockIntervalMs": 1,
+            "maxHistoricStateDbSize": 100000000,
 	        "nodes": [
 	          { "nodeID": 1112, "ip": "127.0.0.1", "basePort": 1231, "schainIndex" : 1, "publicKey":""}
 	        ]
